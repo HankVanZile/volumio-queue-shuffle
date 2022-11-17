@@ -6,10 +6,12 @@ const fetch = require('node-fetch');
 const json_queue = fetch('http://volumio.local/api/v1/getQueue')
   // Return our results as text so we can manipulate it
   .then(res => res.text())
+  .then (
+    
+  )
   .then(text => {
-    console.log('Old Queue:')
-
-    console.log(text);
+    console.log('Queue fetched.')
+    
     // Now just get the inner items by getting everything between [ and ]
     const all_tracks = text.substring( 
       text.indexOf("[") + 1, 
@@ -40,21 +42,34 @@ const shuffle = (array) => {
 };
 
 // Put the outer pieces of JSON back into place
-let new_queue = "";
-new_queue += "{\n  \"queue\": [\n";
-new_queue += shuffle(tracks_array).toString();
-new_queue += "\n  ]\n}";
+// let new_queue = "";
+// new_queue += "{\n  \"queue\": [\n";
+const new_queue = shuffle(tracks_array).toString();
+// new_queue += "\n  ]\n}";
 
-console.log('New Queue:')
+console.log('Queue successfully shuffled.')
 console.log(new_queue);
 
 // Turn the string back into a JSON object
-const new_json_queue = JSON.parse(new_queue);
-console.log(new_json_queue);
+// Might not need to do this with node-fetch because it expects to push a string to JSON
+// const new_json_queue = JSON.parse(new_queue);
+// console.log(new_json_queue);
 
 // This all works very well to get and manipulate the queue
 // Need to see if we can do another fetch from within this one to push the data back
-  })
+    // http://volumio.local/api/v1/replaceAndPlay
+  //   fetch('http://volumio.local/api/v1/replaceAndPlay', {
+  //           method: 'post',
+  //           body:    new_queue,
+  //           headers: { 'Content-Type': 'application/json' },
+  //       })
+  //       .then(push_res => push_res.json())
+  //       .then(new_queue_json => console.log(new_queue_json))
+  //       .then(console.log('Queue successfully uploaded.'));
+
+
+   })
+
 
 
 
@@ -64,47 +79,47 @@ console.log(new_json_queue);
 // const json_queue = fs.readFileSync("example_queue.json");
 
 // Convert the JSON object to a string so we can manipulate it
-const queue = json_queue.toString();
+// const queue = json_queue.toString();
 
 // Now just get the inner items by getting everything between [ and ]
-const all_tracks = queue.substring( 
-  queue.indexOf("[") + 1, 
-  queue.lastIndexOf("]")
-);
+// const all_tracks = queue.substring( 
+//   queue.indexOf("[") + 1, 
+//   queue.lastIndexOf("]")
+// );
 
 // Place each track listing into an array using a regex to detect each set of curly braces,
 // iterating through those matches, and adding them to an array
-const regex = /{([^}]+)}/g;
-tracks = regex.exec(all_tracks);
-const tracks_array = []; 
+// const regex = /{([^}]+)}/g;
+// tracks = regex.exec(all_tracks);
+// const tracks_array = []; 
 
-while (tracks != null) {
-  tracks_array.push(tracks[0]);
-  tracks = regex.exec(all_tracks);
-}
+// while (tracks != null) {
+//   tracks_array.push(tracks[0]);
+//   tracks = regex.exec(all_tracks);
+// }
 
 // Helper function to shuffle the order of the array using the Fisher-Yates shuffle algorithm
-const shuffle = (array) => {
-  for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      const temp = array[i];
+// const shuffle = (array) => {
+//   for (let i = array.length - 1; i > 0; i--) {
+//       const j = Math.floor(Math.random() * (i + 1));
+//       const temp = array[i];
 
-      // Swap
-      array[i] = array[j];
-      array[j] = temp;
-  }
-  return array;
-};
+//       // Swap
+//       array[i] = array[j];
+//       array[j] = temp;
+//   }
+//   return array;
+// };
 
 // Put the outer pieces of JSON back into place
-let new_queue = "";
-new_queue += "{\n  \"queue\": [\n";
-new_queue += shuffle(tracks_array).toString();
-new_queue += "\n  ]\n}";
+// let new_queue = "";
+// new_queue += "{\n  \"queue\": [\n";
+// new_queue += shuffle(tracks_array).toString();
+// new_queue += "\n  ]\n}";
 
 // Turn the string back into a JSON object
-const new_json_queue = JSON.parse(new_queue);
-console.log(new_json_queue);
+// const new_json_queue = JSON.parse(new_queue);
+// console.log(new_json_queue);
 
 // Push the new queue to the Volumio API, replacing the existing queue
 // volumio.local/api/v1/replaceAndPlay
