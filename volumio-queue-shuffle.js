@@ -8,8 +8,8 @@
 
 
 // Read the content of our example queue
-const fs = require('fs');
-const json_queue = fs.readFileSync("example_queue.json");
+// const fs = require('fs');
+// const json_queue = fs.readFileSync("example_queue.json");
 
 // Convert the JSON object to a string so we can manipulate it
 const queue = json_queue.toString();
