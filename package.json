@@ -6,5 +6,5 @@
   "license": "",
   "version": "1.0.0",
   "main": "volumio-queue-shuffle.js",
-  "dependencies" : []
+  "dependencies" : {}
 }
