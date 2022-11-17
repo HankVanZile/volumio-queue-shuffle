@@ -3,10 +3,10 @@
   "description": "A simple script that calls the Volumio API, extracts the current queue, and then places the tracks back in a randomized order.",
   "homepage": "https://github.com/HankVanZile/volumio-queue-shuffle",
   "author": "Hank VanZile <hank@hankvanzile.com>",
-  "license": "",
+  "license": "MIT",
   "version": "1.0.0",
   "main": "volumio-queue-shuffle.js",
   "dependencies": {
-    "node-fetch": "^3.3.0"
+    "node-fetch": "^2.6.7"
   }
 }
