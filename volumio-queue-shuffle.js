@@ -52,7 +52,8 @@ console.log(new_queue);
 const new_json_queue = JSON.parse(new_queue);
 console.log(new_json_queue);
 
-
+// This all works very well to get and manipulate the queue
+// Need to see if we can do another fetch from within this one to push the data back
   })
 
 
