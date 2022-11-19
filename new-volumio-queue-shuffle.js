@@ -112,7 +112,64 @@ async function volumioQueueShuffle() {
     tracks_array.push(tracks[0]);
     tracks = regex.exec(all_tracks);
   }
+
+  console.log(all_tracks);
   
+// 4. New approach - replace addtoQueue with http://volumio.local/api/v1/replaceAndPlay
+// This will require me to transform the API payload a bit
+// Expected payload: 
+// {
+//     "item": {
+//       "uri": "music-library/NAS/HI_Res_Music/Rodriguez - 1970 - Cold Fact [Light in the Attic, LITA036]/06 - Forget It.flac",
+//       "service": "mpd",
+//       "title": "Forget It",
+//       "artist": "Rodriguez",
+//       "album": "Cold Fact",
+//       "type": "song",
+//       "tracknumber": 0,
+//       "duration": 110,
+//       "trackType": "flac"
+//     },
+//     "list": [
+//       {
+//         "uri": "music-library/NAS/HI_Res_Music/Rodriguez - 1970 - Cold Fact [Light in the Attic, LITA036]/01 - Sugar Man.flac",
+//         "service": "mpd",
+//         "title": "Sugar Man",
+//         "artist": "Rodriguez",
+//         "album": "Cold Fact",
+//         "type": "song",
+//         "tracknumber": 0,
+//         "duration": 229,
+//         "trackType": "flac"
+//       },
+//       {
+//         "uri": "music-library/NAS/HI_Res_Music/Rodriguez - 1970 - Cold Fact [Light in the Attic, LITA036]/02 - Only Good for Conversation.flac",
+//         "service": "mpd",
+//         "title": "Only Good for Conversation",
+//         "artist": "Rodriguez",
+//         "album": "Cold Fact",
+//         "type": "song",
+//         "tracknumber": 0,
+//         "duration": 144,
+//         "trackType": "flac"
+//       },
+//       {
+//         "uri": "music-library/NAS/HI_Res_Music/Rodriguez - 1970 - Cold Fact [Light in the Attic, LITA036]/03 - Crucify Your Mind.flac",
+//         "service": "mpd",
+//         "title": "Crucify Your Mind",
+//         "artist": "Rodriguez",
+//         "album": "Cold Fact",
+//         "type": "song",
+//         "tracknumber": 0,
+//         "duration": 152,
+//         "trackType": "flac"
+//       }
+//     ],
+//     "index": 1
+//   }
+
+
+
   // Construct the expected payload by putting the [ ] back around the shuffled queue 
   let new_queue = "[";
   new_queue += shuffle(tracks_array).toString();
@@ -125,16 +182,16 @@ console.log("Queue shuffled!");
 // Can I clear current track?
 
 // 4. Add items to the queue: http://volumio.local/api/v1/addToQueue
-console.log("Uploading new queue...");
-const uploaded_queue = await fetch('http://volumio.local/api/v1/addToQueue', {
-            method: 'post',
-            body:    new_queue,
-            headers: { 'Content-Type': 'application/json' },
-        })
-    console.log("Queue uploaded!");
-    const stop_queue = await fetch('http://volumio.local/api/v1/commands/?cmd=stop');
-    const play_queue = await fetch('http://volumio.local/api/v1/commands/?cmd=play');
-}
+// console.log("Uploading new queue...");
+// const uploaded_queue = await fetch('http://volumio.local/api/v1/addToQueue', {
+//             method: 'post',
+//             body:    new_queue,
+//             headers: { 'Content-Type': 'application/json' },
+//         })
+//     console.log("Queue uploaded!");
+//     const stop_queue = await fetch('http://volumio.local/api/v1/commands/?cmd=stop');
+//     const play_queue = await fetch('http://volumio.local/api/v1/commands/?cmd=play');
+ }
 
 volumioQueueShuffle();
 
