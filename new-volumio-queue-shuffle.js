@@ -85,7 +85,7 @@ async function volumioQueueShuffle() {
     const get_current_queue = await fetch('http://volumio.local/api/v1/getQueue');
     const current_queue = await get_current_queue.text();
     console.log("Queue retrieved successfully!");
-    // console.log(current_queue);
+    //console.log(current_queue);
 
     // 2. Clear the queue: http://volumio.local/api/v1/commands/?cmd=clearQueue
     console.log("Clearing queue...");
@@ -113,82 +113,30 @@ async function volumioQueueShuffle() {
     tracks = regex.exec(all_tracks);
   }
 
-  console.log(all_tracks);
+ // console.log(all_tracks);
   
 // 4. New approach - replace addtoQueue with http://volumio.local/api/v1/replaceAndPlay
 // This will require me to transform the API payload a bit
-// Expected payload: 
-// {
-//     "item": {
-//       "uri": "music-library/NAS/HI_Res_Music/Rodriguez - 1970 - Cold Fact [Light in the Attic, LITA036]/06 - Forget It.flac",
-//       "service": "mpd",
-//       "title": "Forget It",
-//       "artist": "Rodriguez",
-//       "album": "Cold Fact",
-//       "type": "song",
-//       "tracknumber": 0,
-//       "duration": 110,
-//       "trackType": "flac"
-//     },
-//     "list": [
-//       {
-//         "uri": "music-library/NAS/HI_Res_Music/Rodriguez - 1970 - Cold Fact [Light in the Attic, LITA036]/01 - Sugar Man.flac",
-//         "service": "mpd",
-//         "title": "Sugar Man",
-//         "artist": "Rodriguez",
-//         "album": "Cold Fact",
-//         "type": "song",
-//         "tracknumber": 0,
-//         "duration": 229,
-//         "trackType": "flac"
-//       },
-//       {
-//         "uri": "music-library/NAS/HI_Res_Music/Rodriguez - 1970 - Cold Fact [Light in the Attic, LITA036]/02 - Only Good for Conversation.flac",
-//         "service": "mpd",
-//         "title": "Only Good for Conversation",
-//         "artist": "Rodriguez",
-//         "album": "Cold Fact",
-//         "type": "song",
-//         "tracknumber": 0,
-//         "duration": 144,
-//         "trackType": "flac"
-//       },
-//       {
-//         "uri": "music-library/NAS/HI_Res_Music/Rodriguez - 1970 - Cold Fact [Light in the Attic, LITA036]/03 - Crucify Your Mind.flac",
-//         "service": "mpd",
-//         "title": "Crucify Your Mind",
-//         "artist": "Rodriguez",
-//         "album": "Cold Fact",
-//         "type": "song",
-//         "tracknumber": 0,
-//         "duration": 152,
-//         "trackType": "flac"
-//       }
-//     ],
-//     "index": 1
-//   }
 
 
+// Always start with the one second of silence track 
+let new_queue = '{ "item": {"uri":"spotify:track:4jaXxB0DJ6X4PdjMK8XVfu","service":"spop","name":"One Second of Silence","artist":"Quality Assured Hipsters","album":"One Second of Silence","type":"song","duration":1,"albumart":"https://i.scdn.co/image/ab67616d0000b2738e33f72535d3ee8f7c1e992a","samplerate":"320 kbps","bitdepth":"16 bit","bitrate":"","trackType":"spotify"}, "list": [';
 
-  // Construct the expected payload by putting the [ ] back around the shuffled queue 
-  let new_queue = "[";
-  new_queue += shuffle(tracks_array).toString();
-new_queue += "]"
+  // Construct the rest of the expected payload 
+ new_queue += shuffle(tracks_array).toString();
+new_queue += '], "index": 1}';
 
 console.log("Queue shuffled!");
-// console.log(new_queue);
+console.log(new_queue);
 
 
-// Can I clear current track?
-
-// 4. Add items to the queue: http://volumio.local/api/v1/addToQueue
-// console.log("Uploading new queue...");
-// const uploaded_queue = await fetch('http://volumio.local/api/v1/addToQueue', {
-//             method: 'post',
-//             body:    new_queue,
-//             headers: { 'Content-Type': 'application/json' },
-//         })
-//     console.log("Queue uploaded!");
+console.log("Uploading new queue...");
+const uploaded_queue = await fetch('http://volumio.local/api/v1/replaceAndPlay', {
+            method: 'post',
+            body:    new_queue,
+            headers: { 'Content-Type': 'application/json' },
+        })
+    console.log("Queue uploaded!");
 //     const stop_queue = await fetch('http://volumio.local/api/v1/commands/?cmd=stop');
 //     const play_queue = await fetch('http://volumio.local/api/v1/commands/?cmd=play');
  }
