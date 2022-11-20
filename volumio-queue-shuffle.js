@@ -18,15 +18,15 @@ const fetch = require("node-fetch");
 async function volumioQueueShuffle() {
   // 1. Retrieve the current queue from the Volumio API: http://volumio.local/api/v1/getQueue
   console.log("Retrieving current queue...");
-  const get_current_queue = await fetch("http://volumio.local/api/v1/getQueue");
+  // const get_current_queue = await fetch("http://volumio.local/api/v1/getQueue");
+  const get_current_queue = await fetch("localhost:3000/api/v1/getQueue");
   const current_queue = await get_current_queue.text();
   console.log("Queue retrieved successfully!");
 
   // 2. Clear the queue: http://volumio.local/api/v1/commands/?cmd=clearQueue
   console.log("Clearing queue...");
-  const clear_queue = await fetch(
-    "http://volumio.local/api/v1/commands/?cmd=clearQueue"
-  );
+  //const clear_queue = await fetch("http://volumio.local/api/v1/commands/?cmd=clearQueue");
+  const clear_queue = await fetch("localhost:3000/api/v1/commands/?cmd=clearQueue");
   console.log("Queue cleared successfully!");
 
   // 3. Strip out unnecessary data and shuffle tracks
@@ -62,7 +62,8 @@ async function volumioQueueShuffle() {
   // 4. Upload the shuffled queue and start playing: http://volumio.local/api/v1/replaceAndPlay
   console.log("Uploading new queue...");
   const uploaded_queue = await fetch(
-    "http://volumio.local/api/v1/replaceAndPlay",
+    //"http://volumio.local/api/v1/replaceAndPlay",
+    "localhost:3000/api/v1/replaceAndPlay",
     {
       method: "post",
       body: new_queue,
